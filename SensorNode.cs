@@ -10,15 +10,19 @@ namespace NewAsyncFeatures
         private readonly Channel<SensorReading> _channel;
         private readonly Random _noiseGenerator;
 
-        public SensorNode(string id, int interval, Channel<SensorReading> channel, Random noiseGenerator)
+        public SensorNode(string id, int interval, Random noiseGenerator)
         {
-            var timer = new Timer(Callback);
-            timer.Change(interval, interval);
             _id = id;
-            _channel = channel;
             _noiseGenerator = noiseGenerator;
+
+            var channelOptions = new BoundedChannelOptions(1) { FullMode = BoundedChannelFullMode.DropNewest };
+            _channel = Channel.CreateBounded<SensorReading>(channelOptions);
+
+            var timer = new Timer(Callback);
+            var noisedInterval = interval + _noiseGenerator.Next(1000);
+            timer.Change(noisedInterval, noisedInterval);
         }
-        
+
         public ChannelReader<SensorReading> ChannelOutput => _channel.Reader;
 
         private void Callback(object state)
@@ -29,7 +33,7 @@ namespace NewAsyncFeatures
         }
     }
 
-    public class SensorReading
+    public struct SensorReading
     {
         public SensorReading(string sensorId, double value, DateTime timeStamp)
         {
