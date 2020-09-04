@@ -9,16 +9,16 @@ namespace NewAsyncFeatures
         {
             var random = new Random();
 
-            var gateWay = new Gateway();
+            var gateway = new Gateway();
 
             for (int i = 0; i < 10; i++)
             {
-                gateWay.ConnectSensorNode(new SensorNode($"node {i}", (i % 2 == 0 ? 2000 : 7000), random));
+                gateway.ConnectSensorNode(new SensorNode($"node {i}", (i % 2 == 0 ? 2000 : 7000), random));
             }
 
             System.Console.WriteLine("Start reading first run");
 
-            await foreach (var item in gateWay.GetLatestReadings())
+            await foreach (var item in gateway.GetLatestReadings())
             {
                 Console.WriteLine($"{item.SensorId} - {item.Value} - {item.TimeStamp}");
             }
@@ -28,7 +28,7 @@ namespace NewAsyncFeatures
 
             System.Console.WriteLine("Start reading second run");
 
-            await foreach (var item in gateWay.GetLatestReadings())
+            await foreach (var item in gateway.GetLatestReadings())
             {
                 Console.WriteLine($"{item.SensorId} - {item.Value} - {item.TimeStamp}");
             }

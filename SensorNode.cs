@@ -15,7 +15,10 @@ namespace NewAsyncFeatures
             _id = id;
             _noiseGenerator = noiseGenerator;
 
-            var channelOptions = new BoundedChannelOptions(1) { FullMode = BoundedChannelFullMode.DropNewest };
+            var channelOptions = new BoundedChannelOptions(1)
+            {
+                FullMode = BoundedChannelFullMode.DropNewest
+            };
             _channel = Channel.CreateBounded<SensorReading>(channelOptions);
 
             var timer = new Timer(OnIntervalElapsed);
@@ -23,7 +26,7 @@ namespace NewAsyncFeatures
             timer.Change(noisedInterval, noisedInterval);
         }
 
-        public ChannelReader<SensorReading> ChannelOutput => _channel.Reader;
+        public ChannelReader<SensorReading> Output => _channel.Reader;
 
         private void OnIntervalElapsed(object state)
         {
