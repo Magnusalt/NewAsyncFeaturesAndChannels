@@ -10,15 +10,11 @@ namespace NewAsyncFeatures
     {
         private List<SensorNode> _sensorNodes;
 
-        public Gateway()
-        {
+        public Gateway() =>
             _sensorNodes = new List<SensorNode>();
-        }
 
-        public void ConnectSensorNode(SensorNode sensorNode)
-        {
+        public void ConnectSensorNode(SensorNode sensorNode) =>
             _sensorNodes.Add(sensorNode);
-        }
 
         private async Task ReadValueAndCopyToOutput(SensorNode sensorNode, ChannelWriter<SensorReading> output)
         {
@@ -46,7 +42,6 @@ namespace NewAsyncFeatures
         public IAsyncEnumerable<SensorReading> GetLatestReadings()
         {
             var channel = StartReadingFromSensors();
-
             return channel.ReadAllAsync();
         }
     }
